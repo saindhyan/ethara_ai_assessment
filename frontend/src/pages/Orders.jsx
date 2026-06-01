@@ -42,6 +42,12 @@ export default function Orders() {
     setItems(updated);
   };
 
+  const orderTotal = items.reduce((sum, item) => {
+    const product = products.find((p) => p.id === parseInt(item.product_id));
+    if (!product || !item.quantity) return sum;
+    return sum + parseFloat(product.price) * parseInt(item.quantity);
+  }, 0);
+
   const handleCreate = (e) => {
     e.preventDefault();
     setError("");
@@ -185,6 +191,12 @@ export default function Orders() {
               <button type="button" className="btn btn-secondary btn-sm" onClick={addItem} style={{ marginBottom: 16 }}>
                 + Add Item
               </button>
+
+              {orderTotal > 0 && (
+                <div style={{ textAlign: "right", fontWeight: 700, fontSize: "1rem", marginBottom: 12, color: "#111827" }}>
+                  Total: ${orderTotal.toFixed(2)}
+                </div>
+              )}
 
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowCreateModal(false)}>Cancel</button>
